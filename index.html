@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Freshmo Academy – Agribusiness & Innovation</title>
+<meta name="description" content="Transform your future through agribusiness, healthcare, and life skills. Browse 21 practical online courses and enrol instantly.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Variables ─────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green-900:#0f2d1c;
+  --green-800:#1a3d2b;
+  --green-700:#235234;
+  --green-600:#2d6a4f;
+  --green-500:#40916c;
+  --green-400:#52b788;
+  --green-300:#74c69d;
+  --green-100:#d8f3dc;
+  --gold:#c9a84c;
+  --gold-light:#e8c96b;
+  --cream:#faf7f0;
+  --white:#ffffff;
+  --text:#1c2b22;
+  --text-muted:#5a7060;
+  --radius:14px;
+  --shadow:0 4px 24px rgba(15,45,28,.12);
+  --shadow-lg:0 12px 48px rgba(15,45,28,.18);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+
+/* ── Utility ───────────────────────────────────────────────────────────── */
+.lms{--base:https://freshmo.pythonanywhere.com}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.75rem;border-radius:50px;font-weight:600;font-size:.9rem;cursor:pointer;transition:all .25s;border:none;white-space:nowrap}
+.btn-primary{background:var(--gold);color:var(--green-900)}
+.btn-primary:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 6px 20px rgba(201,168,76,.4)}
+.btn-green{background:var(--green-600);color:var(--white)}
+.btn-green:hover{background:var(--green-500);transform:translateY(-2px);box-shadow:0 6px 20px rgba(45,106,79,.35)}
+.btn-outline{background:transparent;color:var(--white);border:2px solid rgba(255,255,255,.5)}
+.btn-outline:hover{background:rgba(255,255,255,.15);border-color:var(--white)}
+.btn-sm{padding:.5rem 1.25rem;font-size:.82rem}
+.tag{display:inline-block;padding:.25rem .75rem;border-radius:50px;font-size:.72rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.tag-health{background:#dcfce7;color:#166534}
+.tag-agri{background:#fef9c3;color:#854d0e}
+.tag-skills{background:#ede9fe;color:#6d28d9}
+.tag-free{background:#dcfce7;color:#15803d}
+.tag-paid{background:#fee2e2;color:#b91c1c}
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+.section-label{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green-400);margin-bottom:.5rem}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:900;line-height:1.15;color:var(--green-900)}
+.section-title span{color:var(--gold)}
+
+/* ── Navbar ────────────────────────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:all .3s}
+nav.scrolled{background:var(--green-900);box-shadow:0 2px 20px rgba(0,0,0,.25)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:.9rem 24px;max-width:1180px;margin:0 auto}
+.nav-logo{display:flex;align-items:center;gap:.6rem}
+.nav-logo img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
+.nav-logo-text{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--white);line-height:1}
+.nav-logo-text span{display:block;font-family:'DM Sans',sans-serif;font-size:.65rem;font-weight:400;color:var(--green-300);letter-spacing:.06em;text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:1.75rem}
+.nav-links a{color:rgba(255,255,255,.82);font-size:.88rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-cta{display:flex;align-items:center;gap:.75rem}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{width:22px;height:2px;background:var(--white);border-radius:2px;transition:.3s}
+.mobile-menu{display:none;position:fixed;inset:0;background:var(--green-900);z-index:99;flex-direction:column;align-items:center;justify-content:center;gap:2rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--white);transition:color .2s}
+.mobile-menu a:hover{color:var(--gold)}
+.mobile-close{position:absolute;top:1.5rem;right:1.5rem;font-size:1.8rem;color:var(--white);cursor:pointer;background:none;border:none}
+
+/* ── Hero ──────────────────────────────────────────────────────────────── */
+.hero{min-height:100vh;background:linear-gradient(155deg,var(--green-900) 0%,var(--green-700) 55%,var(--green-600) 100%);position:relative;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background-image:
+  radial-gradient(ellipse 60% 50% at 80% 40%,rgba(201,168,76,.12) 0%,transparent 60%),
+  radial-gradient(ellipse 40% 60% at 10% 80%,rgba(82,183,136,.1) 0%,transparent 50%);
+}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%)}
+.hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;padding:7rem 0 5rem;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:var(--gold-light);padding:.4rem 1rem;border-radius:50px;font-size:.8rem;font-weight:600;letter-spacing:.05em;margin-bottom:1.5rem}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite}
+.hero-h1{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5vw,3.8rem);font-weight:900;line-height:1.1;color:var(--white);margin-bottom:1.25rem}
+.hero-h1 em{color:var(--gold);font-style:normal}
+.hero-p{color:rgba(255,255,255,.75);font-size:1.05rem;line-height:1.75;margin-bottom:2rem;max-width:480px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:2.5rem}
+.hero-stats{display:flex;gap:2.5rem}
+.stat-item{text-align:left}
+.stat-num{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:var(--white);line-height:1}
+.stat-label{font-size:.75rem;color:rgba(255,255,255,.55);margin-top:.2rem;text-transform:uppercase;letter-spacing:.06em}
+.hero-visual{position:relative}
+.hero-card-stack{position:relative;height:460px}
+.course-preview-card{position:absolute;background:var(--white);border-radius:20px;box-shadow:var(--shadow-lg);overflow:hidden;transition:transform .4s ease}
+.cpc-main{width:300px;height:340px;right:0;top:40px}
+.cpc-main img{width:100%;height:180px;object-fit:cover}
+.cpc-main .cpc-body{padding:1rem}
+.cpc-main .cpc-title{font-weight:700;font-size:.95rem;color:var(--green-900);margin-bottom:.4rem;line-height:1.3}
+.cpc-main .cpc-meta{font-size:.78rem;color:var(--text-muted);margin-bottom:.8rem}
+.cpc-price{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--green-600)}
+.cpc-float1{width:175px;left:-20px;top:10px;padding:1rem;display:flex;flex-direction:column;gap:.4rem}
+.cpc-float1 .icon{width:40px;height:40px;border-radius:10px;background:var(--green-100);display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.cpc-float1 .fl-label{font-size:.72rem;color:var(--text-muted)}
+.cpc-float1 .fl-val{font-weight:700;font-size:.9rem;color:var(--green-900)}
+.cpc-float2{width:175px;right:20px;bottom:0;padding:1rem;display:flex;align-items:center;gap:.75rem}
+.cpc-float2 .cert-icon{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.cpc-float2 .cert-text{font-size:.78rem;color:var(--text-muted);line-height:1.4}
+.cpc-float2 .cert-text strong{color:var(--green-900);display:block;font-size:.85rem}
+.hero-visual::after{content:'';position:absolute;inset:-40px;background:radial-gradient(ellipse at 60% 50%,rgba(82,183,136,.08),transparent 70%);pointer-events:none;z-index:-1}
+
+/* ── Trust bar ─────────────────────────────────────────────────────────── */
+.trust-bar{background:var(--green-800);padding:1rem 0}
+.trust-inner{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:1.5rem 3rem}
+.trust-item{display:flex;align-items:center;gap:.5rem;color:rgba(255,255,255,.7);font-size:.82rem;font-weight:500}
+.trust-item svg{width:16px;height:16px;fill:var(--gold);flex-shrink:0}
+
+/* ── How it Works ──────────────────────────────────────────────────────── */
+.steps{padding:5rem 0;background:var(--white)}
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:3rem}
+.step-card{text-align:center;padding:2rem 1.5rem;border-radius:var(--radius);position:relative;transition:transform .3s,box-shadow .3s}
+.step-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.step-num{width:48px;height:48px;border-radius:50%;background:var(--green-600);color:var(--white);font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem}
+.step-connector{position:absolute;top:2.9rem;left:calc(50% + 30px);width:calc(100% - 60px);height:2px;background:linear-gradient(90deg,var(--green-300),var(--green-100));display:block}
+.step-card:last-child .step-connector{display:none}
+.step-icon{font-size:2rem;margin-bottom:.75rem}
+.step-title{font-weight:700;font-size:.95rem;color:var(--green-900);margin-bottom:.4rem}
+.step-desc{font-size:.82rem;color:var(--text-muted);line-height:1.6}
+
+/* ── Courses ───────────────────────────────────────────────────────────── */
+.courses-section{padding:5rem 0;background:var(--cream)}
+.filter-bar{display:flex;flex-wrap:wrap;gap:.6rem;margin:2rem 0 2.5rem}
+.filter-btn{padding:.45rem 1.1rem;border-radius:50px;font-size:.82rem;font-weight:600;cursor:pointer;border:2px solid transparent;transition:all .2s;background:var(--white);color:var(--text-muted);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.filter-btn.active,.filter-btn:hover{background:var(--green-600);color:var(--white);border-color:var(--green-600)}
+.courses-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.5rem}
+.course-card{background:var(--white);border-radius:18px;overflow:hidden;box-shadow:0 2px 12px rgba(15,45,28,.07);transition:transform .3s,box-shadow .3s;display:flex;flex-direction:column}
+.course-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+.course-card.hidden{display:none}
+.card-thumb{position:relative;overflow:hidden;height:180px;background:linear-gradient(135deg,var(--green-600),var(--green-400))}
+.card-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.course-card:hover .card-thumb img{transform:scale(1.07)}
+.card-thumb .thumb-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(15,45,28,.5) 0%,transparent 50%)}
+.card-thumb .card-category{position:absolute;top:.75rem;left:.75rem}
+.card-thumb .card-price-badge{position:absolute;bottom:.75rem;right:.75rem;background:var(--white);color:var(--green-900);font-family:'Playfair Display',serif;font-weight:900;font-size:1rem;padding:.25rem .7rem;border-radius:50px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.thumb-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem}
+.thumb-placeholder .thumb-emoji{font-size:3rem}
+.thumb-placeholder .thumb-text{font-size:.75rem;color:rgba(255,255,255,.8);font-weight:600;text-align:center;padding:0 1rem}
+.card-body{padding:1.1rem;flex:1;display:flex;flex-direction:column}
+.card-title{font-weight:700;font-size:.92rem;color:var(--green-900);line-height:1.4;margin-bottom:.5rem;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-meta{display:flex;align-items:center;gap:1rem;font-size:.75rem;color:var(--text-muted);margin-bottom:1rem}
+.card-meta span{display:flex;align-items:center;gap:.3rem}
+.card-meta svg{width:12px;height:12px;flex-shrink:0}
+.card-enrol{display:block;width:100%;text-align:center;padding:.65rem;border-radius:10px;font-weight:700;font-size:.85rem;transition:all .2s}
+.card-enrol.free{background:var(--green-100);color:var(--green-700)}
+.card-enrol.free:hover{background:var(--green-600);color:var(--white)}
+.card-enrol.paid{background:var(--green-600);color:var(--white)}
+.card-enrol.paid:hover{background:var(--green-500)}
+.show-more{text-align:center;margin-top:2.5rem}
+
+/* ── Categories Feature ────────────────────────────────────────────────── */
+.categories{padding:4rem 0;background:var(--green-900)}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+.cat-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:2rem;text-align:center;cursor:pointer;transition:all .3s;text-decoration:none;display:block}
+.cat-card:hover{background:rgba(255,255,255,.12);transform:translateY(-4px);border-color:var(--gold)}
+.cat-emoji{font-size:2.8rem;margin-bottom:1rem}
+.cat-name{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--white);margin-bottom:.4rem}
+.cat-count{font-size:.82rem;color:rgba(255,255,255,.55)}
+.cat-arrow{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;color:var(--gold);margin-top:.75rem;font-weight:600}
+
+/* ── Why Us ────────────────────────────────────────────────────────────── */
+.why{padding:5rem 0;background:var(--white)}
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;margin-top:3rem}
+.why-features{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.why-feat{padding:1.25rem;border-radius:var(--radius);background:var(--cream);border-left:3px solid var(--green-400)}
+.why-feat-icon{font-size:1.5rem;margin-bottom:.5rem}
+.why-feat-title{font-weight:700;font-size:.9rem;color:var(--green-900);margin-bottom:.3rem}
+.why-feat-desc{font-size:.78rem;color:var(--text-muted);line-height:1.55}
+.why-visual{position:relative;border-radius:24px;overflow:hidden;height:420px;box-shadow:var(--shadow-lg)}
+.why-visual img{width:100%;height:100%;object-fit:cover}
+.why-visual-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(15,45,28,.7) 0%,transparent 60%)}
+.why-cert-badge{position:absolute;bottom:1.5rem;left:1.5rem;background:var(--white);border-radius:14px;padding:1rem 1.25rem;box-shadow:var(--shadow);display:flex;align-items:center;gap:.75rem}
+.wcb-icon{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.wcb-text strong{display:block;font-weight:700;font-size:.88rem;color:var(--green-900)}
+.wcb-text span{font-size:.75rem;color:var(--text-muted)}
+
+/* ── Testimonials ──────────────────────────────────────────────────────── */
+.testimonials{padding:5rem 0;background:var(--cream)}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+.testi-card{background:var(--white);border-radius:20px;padding:1.75rem;box-shadow:0 2px 12px rgba(15,45,28,.06);position:relative}
+.testi-card::before{content:'"';position:absolute;top:1rem;right:1.5rem;font-family:'Playfair Display',serif;font-size:4rem;color:var(--green-100);line-height:1}
+.testi-text{font-size:.9rem;line-height:1.7;color:var(--text);margin-bottom:1.25rem;position:relative;z-index:1}
+.testi-author{display:flex;align-items:center;gap:.75rem}
+.testi-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;color:var(--white);flex-shrink:0}
+.testi-name{font-weight:700;font-size:.88rem;color:var(--green-900)}
+.testi-role{font-size:.75rem;color:var(--text-muted)}
+.stars{color:var(--gold);font-size:.85rem;margin-bottom:.75rem}
+
+/* ── CTA Band ──────────────────────────────────────────────────────────── */
+.cta-band{padding:5rem 0;background:linear-gradient(135deg,var(--green-800),var(--green-600));position:relative;overflow:hidden}
+.cta-band::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 20% 50%,rgba(201,168,76,.15),transparent 50%),radial-gradient(circle at 80% 50%,rgba(82,183,136,.1),transparent 50%)}
+.cta-inner{position:relative;z-index:1;text-align:center}
+.cta-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:900;color:var(--white);margin-bottom:1rem}
+.cta-title em{color:var(--gold);font-style:normal}
+.cta-sub{color:rgba(255,255,255,.75);font-size:1.05rem;margin-bottom:2rem;max-width:520px;margin-left:auto;margin-right:auto}
+.cta-buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem}
+
+/* ── Footer ────────────────────────────────────────────────────────────── */
+footer{background:var(--green-900);color:rgba(255,255,255,.7);padding:4rem 0 0}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+.footer-brand-logo{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
+.footer-brand-logo img{width:36px;height:36px;border-radius:50%;border:2px solid var(--gold)}
+.footer-brand-name{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--white)}
+.footer-desc{font-size:.82rem;line-height:1.7;max-width:280px;margin-bottom:1.5rem}
+.footer-socials{display:flex;gap:.75rem}
+.footer-social{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;transition:background .2s;font-size:.85rem}
+.footer-social:hover{background:var(--gold)}
+.footer-col-title{font-weight:700;font-size:.85rem;color:var(--white);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.footer-links a{font-size:.82rem;transition:color .2s}
+.footer-links a:hover{color:var(--gold)}
+.footer-contact-item{display:flex;gap:.6rem;font-size:.82rem;margin-bottom:.6rem}
+.footer-contact-item svg{width:14px;height:14px;flex-shrink:0;margin-top:2px;fill:var(--gold)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding:1.25rem 0;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.75rem;font-size:.78rem}
+.footer-bottom-links{display:flex;gap:1.25rem}
+.footer-bottom-links a:hover{color:var(--gold)}
+
+/* ── Animations ────────────────────────────────────────────────────────── */
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.animate-up{animation:fadeUp .7s ease both}
+.float-anim{animation:float 4s ease-in-out infinite}
+.float-anim-delay{animation:float 4s ease-in-out 1.5s infinite}
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
+@media(max-width:1024px){
+  .hero-inner{grid-template-columns:1fr;text-align:center;padding:8rem 0 4rem}
+  .hero-p{margin:0 auto 2rem}
+  .hero-actions{justify-content:center}
+  .hero-stats{justify-content:center}
+  .hero-visual{display:none}
+  .why-grid{grid-template-columns:1fr}
+  .why-visual{height:280px}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  .steps-grid{grid-template-columns:1fr 1fr}
+  .step-connector{display:none}
+  .cat-grid{grid-template-columns:1fr}
+  .testi-grid{grid-template-columns:1fr}
+  .why-features{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .steps-grid{grid-template-columns:1fr}
+  .hero-stats{flex-wrap:wrap;gap:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAVBAR ───────────────────────────────────────────────────────────── -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <img src="images/logo.jpeg" alt="Freshmo Logo" onerror="this.style.display='none'">
+      <div class="nav-logo-text">
+        Freshmo Academy
+        <span>Agribusiness &amp; Innovation</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#courses">Courses</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#categories">Programmes</a>
+      <a href="#why-us">Why Us</a>
+      <a href="https://freshmo.pythonanywhere.com/dashboard/contact/">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a href="https://freshmo.pythonanywhere.com/accounts/login/" class="btn btn-outline btn-sm">Sign In</a>
+      <a href="https://freshmo.pythonanywhere.com/dashboard/accounts/signup/student/" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="toggleMenu()">✕</button>
+  <a href="#courses" onclick="toggleMenu()">Courses</a>
+  <a href="#how-it-works" onclick="toggleMenu()">How It Works</a>
+  <a href="#categories" onclick="toggleMenu()">Programmes</a>
+  <a href="#why-us" onclick="toggleMenu()">Why Us</a>
+  <a href="https://freshmo.pythonanywhere.com/accounts/login/" class="btn btn-outline" style="font-family:'DM Sans',sans-serif">Sign In</a>
+  <a href="https://freshmo.pythonanywhere.com/dashboard/accounts/signup/student/" class="btn btn-primary" style="font-family:'DM Sans',sans-serif">Get Started Free</a>
+</div>
+
+<!-- ── HERO ──────────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="container">
+    <div class="hero-inner">
+      <div class="animate-up">
+        <div class="hero-badge">🌱 Zimbabwe's Premier eLearning Platform</div>
+        <h1 class="hero-h1">
+          Learn. Grow.<br><em>Transform</em> Your<br>Community.
+        </h1>
+        <p class="hero-p">
+          Practical online courses in agribusiness, healthcare, and life skills. 
+          Browse, enrol, and start learning instantly — no waiting, no paperwork.
+        </p>
+        <div class="hero-actions">
+          <a href="#courses" class="btn btn-primary">Browse All Courses</a>
+          <a href="https://freshmo.pythonanywhere.com/dashboard/accounts/signup/student/" class="btn btn-outline">Create Free Account</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item"><div class="stat-num">21+</div><div class="stat-label">Live Courses</div></div>
+          <div class="stat-item"><div class="stat-num">1,500+</div><div class="stat-label">Students</div></div>
+          <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Online</div></div>
+          <div class="stat-item"><div class="stat-num">Free</div><div class="stat-label">Many Courses</div></div>
+        </div>
+      </div>
+      <div class="hero-visual float-anim">
+        <div class="hero-card-stack">
+          <div class="course-preview-card cpc-float1 float-anim-delay">
+            <div class="icon">🌿</div>
+            <div class="fl-label">Active Students</div>
+            <div class="fl-val">1,500+ Learners</div>
+          </div>
+          <div class="course-preview-card cpc-main">
+            <img src="images/chill.png.jpeg" alt="Agribusiness Course" onerror="this.src='https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=400&q=80'">
+            <div class="cpc-body">
+              <div class="cpc-title">Chilli Farming Certificate Course</div>
+              <div class="cpc-meta">8 modules · Certificate awarded</div>
+              <div class="cpc-price">$60</div>
+              <a href="https://freshmo.pythonanywhere.com/courses/course/chilli-farming-certificate-course/" class="btn btn-green btn-sm" style="margin-top:.5rem;width:100%;justify-content:center;border-radius:8px">Enrol Now →</a>
+            </div>
+          </div>
+          <div class="course-preview-card cpc-float2">
+            <div class="cert-icon">🏆</div>
+            <div class="cert-text"><strong>Certificate Included</strong>Auto-generated on completion</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRUST BAR ─────────────────────────────────────────────────────────── -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-item"><svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 7.27l-4 3.9.94 5.5L10 14l-4.94 2.67.94-5.5-4-3.9 5.61-.43z"/></svg>AHRO Accredited</div>
+    <div class="trust-item"><svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 7.27l-4 3.9.94 5.5L10 14l-4.94 2.67.94-5.5-4-3.9 5.61-.43z"/></svg>CPD Approved</div>
+    <div class="trust-item"><svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 7.27l-4 3.9.94 5.5L10 14l-4.94 2.67.94-5.5-4-3.9 5.61-.43z"/></svg>Instant Enrolment</div>
+    <div class="trust-item"><svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 7.27l-4 3.9.94 5.5L10 14l-4.94 2.67.94-5.5-4-3.9 5.61-.43z"/></svg>PayPal &amp; Global Payments</div>
+    <div class="trust-item"><svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 7.27l-4 3.9.94 5.5L10 14l-4.94 2.67.94-5.5-4-3.9 5.61-.43z"/></svg>Recognised Certificates</div>
+    <div class="trust-item"><svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 7.27l-4 3.9.94 5.5L10 14l-4.94 2.67.94-5.5-4-3.9 5.61-.43z"/></svg>100% Online &amp; Self-Paced</div>
+  </div>
+</div>
+
+<!-- ── HOW IT WORKS ──────────────────────────────────────────────────────── -->
+<section class="steps" id="how-it-works">
+  <div class="container">
+    <div class="section-label">Simple Process</div>
+    <h2 class="section-title">From browsing to <span>learning in minutes</span></h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <span class="step-connector"></span>
+        <div class="step-icon">🔍</div>
+        <div class="step-title">Browse Courses</div>
+        <div class="step-desc">Explore 21 practical courses across agribusiness, healthcare, and life skills. No login needed to browse.</div>
+        <a href="#courses" class="btn btn-green btn-sm" style="margin-top:1rem">See Courses</a>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <span class="step-connector"></span>
+        <div class="step-icon">📝</div>
+        <div class="step-title">Create Account</div>
+        <div class="step-desc">Quick sign-up in under 2 minutes. Enter your name, email and phone. Verify your email and you're in.</div>
+        <a href="https://freshmo.pythonanywhere.com/dashboard/accounts/signup/student/" class="btn btn-green btn-sm" style="margin-top:1rem">Sign Up Free</a>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <span class="step-connector"></span>
+        <div class="step-icon">💳</div>
+        <div class="step-title">Enrol &amp; Pay</div>
+        <div class="step-desc">Click Enrol on any course. Free courses enrol instantly. Paid courses accept PayPal and debit/credit cards worldwide.</div>
+        <a href="https://freshmo.pythonanywhere.com/courses/" class="btn btn-green btn-sm" style="margin-top:1rem">View Pricing</a>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <div class="step-icon">🎓</div>
+        <div class="step-title">Start Learning</div>
+        <div class="step-desc">Instant access to videos, articles, and practical assignments. Complete at your own pace and earn your certificate.</div>
+        <a href="https://freshmo.pythonanywhere.com/accounts/login/" class="btn btn-primary btn-sm" style="margin-top:1rem">Start Today</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COURSES ───────────────────────────────────────────────────────────── -->
+<section class="courses-section" id="courses">
+  <div class="container">
+    <div class="section-label">All Programmes</div>
+    <h2 class="section-title">21 Courses. <span>Pick yours.</span></h2>
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterCourses('all',this)">All Courses</button>
+      <button class="filter-btn" onclick="filterCourses('health',this)">🏥 Health &amp; Care</button>
+      <button class="filter-btn" onclick="filterCourses('agriculture',this)">🌾 Agriculture</button>
+      <button class="filter-btn" onclick="filterCourses('skills',this)">✨ Life Skills</button>
+      <button class="filter-btn" onclick="filterCourses('free',this)">🆓 Free Courses</button>
+      <button class="filter-btn" onclick="filterCourses('paid',this)">💳 Paid Courses</button>
+    </div>
+    <div class="courses-grid" id="coursesGrid">
+
+      <!-- HEALTH -->
+      <div class="course-card" data-cat="health" data-price="paid">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#065f46,#047857)">
+          <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&q=80" alt="International Health Care" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>🏥</div><div class=\'thumb-text\'>International Health Care</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-health">Health</span>
+          <span class="card-price-badge">$20</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">International Health Care</div>
+          <div class="card-meta"><span><svg viewBox="0 0 16 16" fill="currentColor"><path d="M2 2h12v12H2z" opacity=".3"/><path d="M8 4v4l3 3"/></svg>2 modules</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/international-health-care/" class="card-enrol paid">Get This Course →</a>
+        </div>
+      </div>
+
+      <div class="course-card" data-cat="health" data-price="free">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#166534,#15803d)">
+          <img src="images/food hygiene.jpg" alt="Basic Food Hygiene" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>🥗</div><div class=\'thumb-text\'>Basic Food Hygiene Course</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-health">Health</span>
+          <span class="card-price-badge" style="color:var(--green-700)">FREE</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">BASIC FOOD HYGIENE COURSE</div>
+          <div class="card-meta"><span>2 modules</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/basic-food-hygiene-course/" class="card-enrol free">Enrol Free →</a>
+        </div>
+      </div>
+
+     
+
+      <!-- AGRICULTURE -->
+      <div class="course-card" data-cat="agriculture" data-price="paid">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#713f12,#92400e)">
+          <img src="images/chill.png.jpeg" alt="Chilli Farming" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>🌶️</div><div class=\'thumb-text\'>Chilli Farming Certificate</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-agri">Agriculture</span>
+          <span class="card-price-badge">$60</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">CHILLI FARMING CERTIFICATE COURSE</div>
+          <div class="card-meta"><span>8 modules</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/chilli-farming-certificate-course/" class="card-enrol paid">Get This Course →</a>
+        </div>
+      </div>
+
+      <!-- LIFE SKILLS — Soaps & Cleaning -->
+      <div class="course-card" data-cat="skills" data-price="paid">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#4c1d95,#5b21b6)">
+          <img src="images/floor.jpg" alt="Floor Polish" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>🧹</div><div class=\'thumb-text\'>Floor Polish Production</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-skills">Life Skills</span>
+          <span class="card-price-badge">$40</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Homemade Cobra / Floor Polish Production Course</div>
+          <div class="card-meta"><span>4 modules</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/freshmo-academy/" class="card-enrol paid">Get This Course →</a>
+        </div>
+      </div>
+
+      <div class="course-card" data-cat="skills" data-price="free">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#1e3a5f,#1d4ed8)">
+          <img src="images/soap.jpg" alt="Soapmaking" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>🧼</div><div class=\'thumb-text\'>Introduction to Handmade Soapmaking</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-skills">Life Skills</span>
+          <span class="card-price-badge" style="color:var(--green-700)">FREE</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Introduction to Handmade Soapmaking</div>
+          <div class="card-meta"><span>3 modules</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/introduction-to-handmade-soapmaking/" class="card-enrol free">Enrol Free →</a>
+        </div>
+      </div>
+
+      <div class="course-card" data-cat="skills" data-price="paid">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#7c3aed,#6d28d9)">
+          <img src="images/transparent.jpg" alt="Liquid Soap" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>🧴</div><div class=\'thumb-text\'>Antibacterial Liquid Soap</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-skills">Life Skills</span>
+          <span class="card-price-badge">$20</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Handmade Transparent Antibacterial Multipurpose Liquid Soap (5L)</div>
+          <div class="card-meta"><span>1 module</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/handmade-transparent-antibacterial-multipurpose-liquid-soap-5l-production-zimbabwe-edition/" class="card-enrol paid">Get This Course →</a>
+        </div>
+      </div>
+
+      <div class="course-card" data-cat="skills" data-price="free">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#065f46,#047857)">
+          <img src="images/laundry.jpg" alt="Laundry Soap" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>🧺</div><div class=\'thumb-text\'>Laundry Bar Soap with Tallow</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-skills">Life Skills</span>
+          <span class="card-price-badge" style="color:var(--green-700)">FREE</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">How to Make Laundry/Washing Bar Soap with Tallow</div>
+          <div class="card-meta"><span>2 modules</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/how-to-make-laundrywashing-bar-soap-with-tallow/" class="card-enrol free">Enrol Free →</a>
+        </div>
+      </div>
+
+  
+      <!-- Skincare & Beauty -->
+      <div class="course-card" data-cat="skills" data-price="free">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#831843,#9d174d)">
+          <img src="images/skincare.jpg" alt="Skincare" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>💆</div><div class=\'thumb-text\'>Natural Skincare Formulation</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-skills">Life Skills</span>
+          <span class="card-price-badge" style="color:var(--green-700)">FREE</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Introduction to Natural Skincare Products Formulation</div>
+          <div class="card-meta"><span>3 modules</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/introduction-to-natural-skincare-products-formulation/" class="card-enrol free">Enrol Free →</a>
+        </div>
+      </div>
+
+      <div class="course-card" data-cat="skills" data-price="free">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#7c2d12,#9a3412)">
+          <img src="images/perfum.jpg" alt="Perfume Oil" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>🌹</div><div class=\'thumb-text\'>Handmade Perfume Oil</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-skills">Life Skills</span>
+          <span class="card-price-badge" style="color:var(--green-700)">FREE</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Handmade Perfume Oil Online Course</div>
+          <div class="card-meta"><span>3 modules</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/handmade-perfume-oil-online-course/" class="card-enrol free">Enrol Free →</a>
+        </div>
+      </div>
+
+      <div class="course-card" data-cat="skills" data-price="free">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#6b21a8,#7e22ce)">
+          <img src="images/rose.jpg" alt="Rose Oil Perfume" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>🥀</div><div class=\'thumb-text\'>Rose Oil Perfume Making</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-skills">Life Skills</span>
+          <span class="card-price-badge" style="color:var(--green-700)">FREE</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Rose Oil Perfume Making Course</div>
+          <div class="card-meta"><span>1 module</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/rose-oil-perfume-making-course/" class="card-enrol free">Enrol Free →</a>
+        </div>
+      </div>
+
+      <div class="course-card" data-cat="skills" data-price="free">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#3f6212,#4d7c0f)">
+          <img src="images/natural.jpg" alt="Natural Deodorant" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>🌿</div><div class=\'thumb-text\'>Handmade Natural Deodorant</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-skills">Life Skills</span>
+          <span class="card-price-badge" style="color:var(--green-700)">FREE</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Handmade Natural Deodorant</div>
+          <div class="card-meta"><span>3 modules</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/handmade-natural-deodorant/" class="card-enrol free">Enrol Free →</a>
+        </div>
+      </div>
+
+      <div class="course-card" data-cat="skills" data-price="free">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#0e4429,#166534)">
+          <img src="images/bubble.webp" alt="Bubble Bath" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>🛁</div><div class=\'thumb-text\'>Handmade Bubble Bath</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-skills">Life Skills</span>
+          <span class="card-price-badge" style="color:var(--green-700)">FREE</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Handmade Bubble Bath – High Suds Budget Method</div>
+          <div class="card-meta"><span>1 module</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/handmade-bubble-bath-high-suds-budget-method/" class="card-enrol free">Enrol Free →</a>
+        </div>
+      </div>
+
+      <!-- Food -->
+      <div class="course-card" data-cat="skills" data-price="free">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#78350f,#92400e)">
+          <img src="images/mango.jpg" alt="Mango Jam" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>🥭</div><div class=\'thumb-text\'>Homemade Mango Jam</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-skills">Life Skills</span>
+          <span class="card-price-badge" style="color:var(--green-700)">FREE</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">HOMEMADE MANGO JAM</div>
+          <div class="card-meta"><span>1 module</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/homemade-mango-jam/" class="card-enrol free">Enrol Free →</a>
+        </div>
+      </div>
+
+      <div class="course-card" data-cat="skills" data-price="free">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#c2410c,#ea580c)">
+          <img src="images/marma.jpg" alt="Marmalade Jam" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>🍊</div><div class=\'thumb-text\'>Homemade Marmalade Jam</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-skills">Life Skills</span>
+          <span class="card-price-badge" style="color:var(--green-700)">FREE</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">HOMEMADE MARMALADE JAM (ORANGES)</div>
+          <div class="card-meta"><span>1 module</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/homemade-marmalade-jam-oranges/" class="card-enrol free">Enrol Free →</a>
+        </div>
+      </div>
+
+      <div class="course-card" data-cat="skills" data-price="free">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#d97706,#f59e0b)">
+          <img src="images/mayo.jpg" alt="Mayonnaise" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>🥫</div><div class=\'thumb-text\'>Homemade Mayonnaise</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-skills">Life Skills</span>
+          <span class="card-price-badge" style="color:var(--green-700)">FREE</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Homemade Mayonnaise – Zimbabwe Practical Course</div>
+          <div class="card-meta"><span>1 module</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/homemade-mayonnaise-zimbabwe-practical-course/" class="card-enrol free">Enrol Free →</a>
+        </div>
+      </div>
+
+      <div class="course-card" data-cat="skills" data-price="paid">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#7f1d1d,#991b1b)">
+          <img src="images/chicken.webp" alt="Chicken Sandwich" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>🥪</div><div class=\'thumb-text\'>Homemade Chicken Sandwich</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-skills">Life Skills</span>
+          <span class="card-price-badge">$10</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Homemade Chicken Sandwich Meat Slices (No Preservatives)</div>
+          <div class="card-meta"><span>1 module</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/homemade-chicken-sandwich-meat-slices-no-preservatives/" class="card-enrol paid">Get This Course →</a>
+        </div>
+      </div>
+
+      <div class="course-card" data-cat="skills" data-price="paid">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#5c1010,#7c2020)">
+          <img src="images/beef.jpg" alt="Beef Polony" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>🥩</div><div class=\'thumb-text\'>Homemade Beef Sandwich Slices</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-skills">Life Skills</span>
+          <span class="card-price-badge">$20</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Homemade Beef Sandwich Slices / Polony (No Preservatives)</div>
+          <div class="card-meta"><span>1 module</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/homemade-beef-sandwich-slices-polony-no-preservatives/" class="card-enrol paid">Get This Course →</a>
+        </div>
+      </div>
+
+      <div class="course-card" data-cat="skills" data-price="paid">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#1e1b4b,#312e81)">
+          <img src="images/gummies.webp" alt="Gummies" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>🍬</div><div class=\'thumb-text\'>Homemade Gummies (Zimbabwean)</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-skills">Life Skills</span>
+          <span class="card-price-badge">$10</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">HOME MADE GUMMIES (ZIMBABWEAN VERSION)</div>
+          <div class="card-meta"><span>3 modules</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/home-made-gummies-zimbabwean-version/" class="card-enrol paid">Get This Course →</a>
+        </div>
+      </div>
+
+      <!-- Business -->
+      <div class="course-card" data-cat="skills" data-price="free">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#164e63,#0e7490)">
+          <img src="images/team.jpg" alt="Team Leading" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'thumb-placeholder\'><div class=\'thumb-emoji\'>👥</div><div class=\'thumb-text\'>Principles of Team Leading</div></div>'">
+          <div class="thumb-overlay"></div>
+          <span class="card-category tag tag-skills">Life Skills</span>
+          <span class="card-price-badge" style="color:var(--green-700)">FREE</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Principles of Team Leading</div>
+          <div class="card-meta"><span>1 module</span><span>🏆 Certificate</span></div>
+          <a href="https://freshmo.pythonanywhere.com/courses/course/principles-of-team-leading/" class="card-enrol free">Enrol Free →</a>
+        </div>
+      </div>
+
+    </div><!-- /courses-grid -->
+
+    <div class="show-more">
+      <a href="https://freshmo.pythonanywhere.com/courses/" class="btn btn-green">View All 21 Courses on Learning Platform →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── CATEGORIES ────────────────────────────────────────────────────────── -->
+<section class="categories" id="categories">
+  <div class="container">
+    <div class="section-label" style="color:var(--green-300)">Browse by Programme</div>
+    <h2 class="section-title" style="color:var(--white)">Find the right <span>programme for you</span></h2>
+    <div class="cat-grid">
+      <a href="https://freshmo.pythonanywhere.com/courses/category/agriculture/" class="cat-card">
+        <div class="cat-emoji">🌾</div>
+        <div class="cat-name">Agriculture &amp; Agribusiness</div>
+        <div class="cat-count">Certificate courses · Practical farming skills</div>
+        <div class="cat-arrow">Browse Courses →</div>
+      </a>
+      <a href="https://freshmo.pythonanywhere.com/courses/category/health/" class="cat-card">
+        <div class="cat-emoji">🏥</div>
+        <div class="cat-name">Health &amp; Social Care</div>
+        <div class="cat-count">Internationally recognised · Levels 1–3</div>
+        <div class="cat-arrow">Browse Courses →</div>
+      </a>
+      <a href="https://freshmo.pythonanywhere.com/courses/category/lifeskills/" class="cat-card">
+        <div class="cat-emoji">✨</div>
+        <div class="cat-name">Life Skills &amp; Entrepreneurship</div>
+        <div class="cat-count">Soapmaking · Food · Beauty · Business</div>
+        <div class="cat-arrow">Browse Courses →</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHY US ─────────────────────────────────────────────────────────────── -->
+<section class="why" id="why-us">
+  <div class="container">
+    <div class="why-grid">
+      <div>
+        <div class="section-label">Why Freshmo Academy</div>
+        <h2 class="section-title">Education built for <span>real impact</span></h2>
+        <p style="color:var(--text-muted);font-size:.95rem;line-height:1.75;margin:1rem 0 2rem">We design practical, affordable courses that translate directly into income and community improvement. No fluff — just skills that work.</p>
+        <div class="why-features">
+          <div class="why-feat"><div class="why-feat-icon">⚡</div><div class="why-feat-title">Instant Enrolment</div><div class="why-feat-desc">Browse, pay, and start learning within minutes. No waiting for approval or manual registration.</div></div>
+          <div class="why-feat"><div class="why-feat-icon">🌍</div><div class="why-feat-title">Learn from Anywhere</div><div class="why-feat-desc">Access courses from Zimbabwe, UK, South Africa or anywhere in the world on any device.</div></div>
+          <div class="why-feat"><div class="why-feat-icon">💳</div><div class="why-feat-title">Secure Global Payments</div><div class="why-feat-desc">Pay safely via PayPal, debit or credit card. Internationally accepted. EcoCash also available.</div></div>
+          <div class="why-feat"><div class="why-feat-icon">🏆</div><div class="why-feat-title">Recognised Certificates</div><div class="why-feat-desc">Earn AHRO-accredited and CPD-approved certificates, automatically generated on completion.</div></div>
+        </div>
+        <a href="https://freshmo.pythonanywhere.com/dashboard/accounts/signup/student/" class="btn btn-green" style="margin-top:2rem">Start Your Journey Today</a>
+      </div>
+      <div class="why-visual">
+        <img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?w=600&q=80" alt="Student learning" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=600&q=80'">
+        <div class="why-visual-overlay"></div>
+        <div class="why-cert-badge">
+          <div class="wcb-icon">🏆</div>
+          <div class="wcb-text"><strong>Certificate Awarded</strong><span>Auto-generated on completion</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ──────────────────────────────────────────────────────── -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="section-label">Student Stories</div>
+    <h2 class="section-title">Transforming lives <span>across Africa</span></h2>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"The agribusiness programme transformed my farming approach. I now run a profitable vegetable farm that supports my family and employs three people from my community."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:var(--green-600)">T</div>
+          <div><div class="testi-name">Tadiwa T.</div><div class="testi-role">Agribusiness Graduate · Zimbabwe</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"The practical training in healthcare gave me the confidence and credentials to start my own home-based care service. Enrolling online was quick and easy — I was learning the same day."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:var(--green-500)">S</div>
+          <div><div class="testi-name">Sarah C.</div><div class="testi-role">Healthcare Graduate · Zimbabwe</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"The soapmaking course was free and I started selling handmade soaps within a month. I then did the perfume course and now have a small business. Freshmo Academy changed my life."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:var(--gold)">R</div>
+          <div><div class="testi-name">Reuel M.</div><div class="testi-role">Life Skills Graduate · Zimbabwe</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA BAND ───────────────────────────────────────────────────────────── -->
+<section class="cta-band">
+  <div class="container">
+    <div class="cta-inner">
+      <h2 class="cta-title">Ready to <em>transform</em> your future?</h2>
+      <p class="cta-sub">Join over 1,500 students already learning with Freshmo Academy. Start with a free course today — no credit card required.</p>
+      <div class="cta-buttons">
+        <a href="https://freshmo.pythonanywhere.com/dashboard/accounts/signup/student/" class="btn btn-primary">Create Free Account</a>
+        <a href="https://freshmo.pythonanywhere.com/accounts/login/" class="btn btn-outline">Sign In to My Learning</a>
+        <a href="https://freshmo.pythonanywhere.com/courses/" class="btn" style="background:rgba(255,255,255,.12);color:var(--white);border:2px solid rgba(255,255,255,.25)">Browse All Courses</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-logo">
+          <img src="images/logo.jpeg" alt="Freshmo" onerror="this.style.display='none'">
+          <span class="footer-brand-name">Freshmo Academy</span>
+        </div>
+        <p class="footer-desc">Empowering communities with practical skills in agribusiness, healthcare, and entrepreneurship for sustainable development and financial independence.</p>
+        <div class="footer-socials">
+          <a href="https://www.facebook.com/profile.php?id=61587248252465" class="footer-social" aria-label="Facebook">f</a>
+          <a href="https://www.instagram.com/freshmoacademy/" class="footer-social" aria-label="Instagram">in</a>
+          <a href="https://www.youtube.com/@FreshmoAcademy" class="footer-social" aria-label="YouTube">▶</a>
+          <a href="https://wa.me/447765762236" class="footer-social" aria-label="WhatsApp">W</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Courses</div>
+        <ul class="footer-links">
+          <li><a href="https://freshmo.pythonanywhere.com/courses/category/agriculture/">Agriculture</a></li>
+          <li><a href="https://freshmo.pythonanywhere.com/courses/category/health/">Health &amp; Care</a></li>
+          <li><a href="https://freshmo.pythonanywhere.com/courses/category/lifeskills/">Life Skills</a></li>
+          <li><a href="https://freshmo.pythonanywhere.com/courses/">All Courses</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Account</div>
+        <ul class="footer-links">
+          <li><a href="https://freshmo.pythonanywhere.com/dashboard/accounts/signup/student/">Create Account</a></li>
+          <li><a href="https://freshmo.pythonanywhere.com/accounts/login/">Sign In</a></li>
+          <li><a href="https://freshmo.pythonanywhere.com/dashboard/">My Dashboard</a></li>
+          <li><a href="https://freshmo.pythonanywhere.com/accounts/password/reset/">Reset Password</a></li>
+          <li><a href="https://freshmo.pythonanywhere.com/dashboard/accounts/signup/instructor/">Become an Instructor</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Support</div>
+        <div class="footer-contact-item">
+          <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm.75 10.5h-1.5v-5h1.5v5zm0-6.5h-1.5V3.5h1.5V5z"/></svg>
+          <a href="https://freshmo.pythonanywhere.com/dashboard/help/">Help Centre</a>
+        </div>
+        <div class="footer-contact-item">
+          <svg viewBox="0 0 16 16"><path d="M2 2h12v10H2z" opacity=".3"/><path d="M2 2l6 5.5L14 2"/></svg>
+          <a href="mailto:bnyagomo@freshmoacademy.com">bnyagomo@freshmoacademy.com</a>
+        </div>
+        <div class="footer-contact-item">
+          <svg viewBox="0 0 16 16"><path d="M3 1l2.5 3L4 6s1 3 6 6l2-1.5L15 13l-2 2C4 15 1 3 1 3l2-2z"/></svg>
+          <a href="tel:+447765762236">+44 7765 762236</a>
+        </div>
+        <div class="footer-contact-item">
+          <svg viewBox="0 0 16 16"><path d="M8 1a5 5 0 00-4 8l-2 5 5-2a5 5 0 104-11z"/></svg>
+          <a href="https://wa.me/447765762236">WhatsApp Us</a>
+        </div>
+        <ul class="footer-links" style="margin-top:.75rem">
+          <li><a href="https://freshmo.pythonanywhere.com/dashboard/terms/">Terms of Service</a></li>
+          <li><a href="https://freshmo.pythonanywhere.com/dashboard/privacy/">Privacy Policy</a></li>
+          <li><a href="https://freshmo.pythonanywhere.com/dashboard/contact/">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Freshmo Academy of Agribusiness &amp; Innovation. All rights reserved.</span>
+      <div class="footer-bottom-links">
+        <a href="https://freshmo.pythonanywhere.com/dashboard/terms/">Terms</a>
+        <a href="https://freshmo.pythonanywhere.com/dashboard/privacy/">Privacy</a>
+        <a href="https://freshmo.pythonanywhere.com/dashboard/contact/">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Navbar scroll effect
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50)
+},{ passive:true })
+
+// Mobile menu
+function toggleMenu(){
+  document.getElementById('mobileMenu').classList.toggle('open')
+  document.body.style.overflow=document.getElementById('mobileMenu').classList.contains('open')?'hidden':''
+}
+
+// Course filter
+function filterCourses(cat,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'))
+  btn.classList.add('active')
+  document.querySelectorAll('.course-card').forEach(card=>{
+    const cardCat=card.dataset.cat
+    const cardPrice=card.dataset.price
+    let show=false
+    if(cat==='all') show=true
+    else if(cat==='free') show=(cardPrice==='free')
+    else if(cat==='paid') show=(cardPrice==='paid')
+    else show=(cardCat===cat)
+    card.classList.toggle('hidden',!show)
+  })
+}
+
+// Smooth reveal on scroll
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.style.opacity='1'
+      e.target.style.transform='translateY(0)'
+    }
+  })
+},{threshold:0.1})
+document.querySelectorAll('.course-card,.step-card,.why-feat,.testi-card,.cat-card').forEach(el=>{
+  el.style.opacity='0'
+  el.style.transform='translateY(20px)'
+  el.style.transition='opacity .5s ease, transform .5s ease'
+  observer.observe(el)
+})
+</script>
+</body>
+</html>
